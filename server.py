@@ -48,7 +48,7 @@ print("RECEIVED PUBLIC KEY")
 
 key1 = RSA.importKey(server_pubkey)
 cipher = PKCS1_OAEP.new(key1)
-en_mess = cipher.encrypt(sym_key) # HERER ASSYMETRIC ENCRYPTION PART STOPS AND SYMMETRIC ENCRYPTION GO ON (SYMMETRIC KEY IS SECURELY RECEIVED)
+en_mess = cipher.encrypt(sym_key) # HERE ASSYMETRIC ENCRYPTION PART STOPS AND SYMMETRIC ENCRYPTION GO ON (SYMMETRIC KEY IS SECURELY RECEIVED)
 connection.send(en_mess)
 
 while True:
