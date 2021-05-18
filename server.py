@@ -13,6 +13,7 @@ soc = socket.socket()
 host_name = socket.gethostname()
 ip = socket.gethostbyname(host_name)
 port = input("Please enter the port the server has to listen on :")
+port = int(port)
 soc.bind((host_name, port))
 print(host_name, '({})'.format(ip))
 name = input('Enter server\'s name: ')
@@ -38,19 +39,16 @@ private_key = key.export_key()
 public_key = key.publickey().export_key()
 encrypted_key = key.export_key()
 # sending public key to client
-print(private_key)
 connection.send(public_key)
 
 #receiving public code
 server_pubkey = connection.recv(1024)
 server_pubkey = server_pubkey.decode()
 print("RECEIVED PUBLIC KEY")
-print(server_pubkey)
 
 key1 = RSA.importKey(server_pubkey)
 cipher = PKCS1_OAEP.new(key1)
 en_mess = cipher.encrypt(sym_key) # HERER ASSYMETRIC ENCRYPTION PART STOPS AND SYMMETRIC ENCRYPTION GO ON (SYMMETRIC KEY IS SECURELY RECEIVED)
-print(en_mess)
 connection.send(en_mess)
 
 while True:
