@@ -30,6 +30,7 @@ print('Type !leave to leave the chat room')
 connection.send(name.encode())
 print("Creating keys...")
 
+
 #change this key if you want, as long it is 16bytes(128bits) or 24(192bits) or 32byte(256bits)
 sym_key = b'16bytepasswordd!'
 
@@ -59,15 +60,15 @@ while True:
         print("Goodbye!")
         break
     # Encrypt message towards client
-    #cipher = AES.new(sym_key, AES.MODE_CBC)
     cipher = AES.new(sym_key, AES.MODE_CBC)
     used_iv = cipher.iv
     ciphermessage = cipher.encrypt(pad(message,AES.block_size))  # TAKE MAX OF 1008 CHARS PER TIME, OTHERWISE ERROR, IF THIS GETS FIXED ITS NOT SIMPLE ENOUGH
-    connection.send(used_iv)
-    connection.send(ciphermessage)
+    TOTAL_MESS = used_iv + b" " + ciphermessage
+    connection.send(TOTAL_MESS)
     # Decrypt message from server
-    used_iv = connection.recv(1024)
-    totalciphermessage = connection.recv(1024)
+    totalciphermessage1 = connection.recv(1024)
+    used_iv = totalciphermessage1[:16]# if block goes wrong is is because of this probs
+    totalciphermessage = totalciphermessage1[17:]
     cipher = AES.new(sym_key, AES.MODE_CBC, used_iv)
     decoded_mess = unpad(cipher.decrypt(totalciphermessage), AES.block_size)
     decoded_mess = decoded_mess.decode()
