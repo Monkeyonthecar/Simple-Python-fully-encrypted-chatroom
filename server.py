@@ -67,7 +67,7 @@ while True:
     connection.send(TOTAL_MESS)
     # Decrypt message from server
     totalciphermessage1 = connection.recv(1024)
-    used_iv = totalciphermessage1[:16]# if block goes wrong is is because of this probs
+    used_iv = totalciphermessage1[:16]# first 16 bytes contain the IV
     totalciphermessage = totalciphermessage1[17:]
     cipher = AES.new(sym_key, AES.MODE_CBC, used_iv)
     decoded_mess = unpad(cipher.decrypt(totalciphermessage), AES.block_size)
