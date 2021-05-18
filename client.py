@@ -52,8 +52,9 @@ sym_key = decipher.decrypt(ciphertext)
 
 while True:
     # Decrypt message from client
-    used_iv = soc.recv(1024)
-    totalciphermessage = soc.recv(1024)
+    totalciphermessage1 = soc.recv(1024)
+    used_iv = totalciphermessage1[:16]
+    totalciphermessage = totalciphermessage1[17:]
     cipher = AES.new(sym_key, AES.MODE_CBC, used_iv)
     decoded_mess = unpad(cipher.decrypt(totalciphermessage), AES.block_size)
     decoded_mess = decoded_mess.decode()
@@ -68,5 +69,5 @@ while True:
     cipher = AES.new(sym_key,AES.MODE_CBC)
     used_iv = cipher.iv
     ciphermessage = cipher.encrypt(pad(message, AES.block_size)) # TAKE MAX OF 1008 CHARS PER TIME, OTHERWISE ERROR, IF THIS GETS FIXED ITS NOT SIMPLE ENOUGH
-    soc.send(used_iv)
-    soc.send(ciphermessage)
+    TOTAL_MESS = used_iv + b" " + ciphermessage
+    soc.send(TOTAL_MESS)
